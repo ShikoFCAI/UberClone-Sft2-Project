@@ -1,9 +1,12 @@
 package transport2;
 
 import java.util.*;
+import java.time.format.DateTimeFormatter;  
+import java.time.LocalDateTime;    
 
 public class Driver extends User implements DriverInterface{
-	
+	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");  
+	LocalDateTime now = LocalDateTime.now();  
 	private String nationalid;
     private String licensenum;
     private boolean state;
@@ -135,13 +138,19 @@ public class Driver extends User implements DriverInterface{
     				String drivername=db.systemdrivers.get(i).getUsername();
     				System.out.println("Your ride hass been found with driver "+drivername+" and the cost: "+z);
     				//System.out.println("Average Rate: "+calculate_Average_Rate(a.systemdrivers.get(i)));
-    				System.out.println("Yes or no");
+    				System.out.println("Would you like to accept this ride (Yes/No)");
+    				System.out.println("The driver has arrived to your location");
+    				System.out.println("The Driver's name: " + drivername);
+    				System.out.println("The Cost of the ride: " + z + "$");
+    				System.out.println("The Time of the ride: " + dtf.format(now));
     				newstate=input.nextLine();
     				
     				if(newstate.equalsIgnoreCase("yes"))
     				{
     					this.setState(true);
     					ResponseRideRequests();
+    					DriverArrivedToLocation(drivername, z);
+    					DriverArrivedToDest(drivername, z);
     					System.out.println("Do you want to give a rate for the driver: (yes/skip");
     					String agree=input.nextLine();
     					agree=input.nextLine();
@@ -163,8 +172,21 @@ public class Driver extends User implements DriverInterface{
 
 	@Override
 	public void ResponseRideRequests() {
-		
-		System.out.println("OK, In the way for you");
+		System.out.println("OK, On the way to you");
+	}
+	
+	public void DriverArrivedToLocation(String driver, int cost) {
+		System.out.println("The driver has arrived to your location");
+		System.out.println("The Driver's name: " + driver);
+		System.out.println("The Cost of the ride: " + cost + "$");
+		System.out.println("The Time of the ride: " + dtf.format(now));
+	}
+	
+	public void DriverArrivedToDest(String driver, int cost) {
+		System.out.println("The driver has arrived to your location");
+		System.out.println("The Driver's name: " + driver);
+		System.out.println("The Cost of the ride: " + cost + "$");
+		System.out.println("The Time of the ride: " + dtf.format(now));
 	}
 	
 	public void RateDriver(Driver d)
@@ -176,7 +198,6 @@ public class Driver extends User implements DriverInterface{
 			d.rates.add(r);
 		}
 	}
-	
 	public void ListRating(Driver d)
 	{
 		for(float y:d.rates) {
